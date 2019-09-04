@@ -1,0 +1,52 @@
+{
+    "DEVELOPMENT": {
+        "app":{
+            "port" : 3000
+        },
+        "db":{
+            "host":"localhost",
+            "port":"27017",
+            "database":"projectmanagement"
+        }
+    },
+    "UNITTESTING": {
+        "app":{
+            "port" : 3000
+        },
+        "db":{
+            "host":"localhost",
+            "port":"27017",
+            "database":"projectmanagementUTdb"
+        }
+    },
+    "SIT": {
+        "app":{
+            "port" : 3000
+        },
+        "db":{
+            "host":"localhost",
+            "port":"27017",
+            "database":"projectmanagementdb"
+        }
+    },
+    "UAT": {
+        "app":{
+            "port" : 3000
+        },
+        "db":{
+            "host":"localhost",
+            "port":"27017",
+            "database":"projectmanagementdb"
+        }
+    },
+    "PRODUCTION": {
+        "app":{
+            "port" : 3000
+        },
+        "db":{
+            "host":"localhost",
+            "port":"27017",
+            "database":"projectmanagementdb"
+        }
+    }
+}
