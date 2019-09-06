@@ -15,7 +15,7 @@ app.use(methodOverride());
 app.use(cors());
 app.use(require('./app/routers'));
 
-const db = mongoose.connect(`mongodb://${global.gConfig.db.host}:${global.gConfig.db.port}/${global.gConfig.db.database}`,{ useNewUrlParser: true, useFindAndModify: false });
+const db = mongoose.connect(`mongodb://${global.gConfig.db.host}:${global.gConfig.db.port}/${global.gConfig.db.database}`,{ useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true });
 
 
 mongoose.connection.on('connected', () => {
