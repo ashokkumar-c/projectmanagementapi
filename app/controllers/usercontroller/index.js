@@ -1,4 +1,5 @@
 const UserModel = require('../../models/user.model');
+var Regex = require("regex");
 
 exports.findUserByID = (req, res, next) => {
     UserModel.find({
@@ -9,9 +10,7 @@ exports.findUserByID = (req, res, next) => {
             res.send(err);
         }
         if (User) {
-            console.log("inside if block");
             req.user = User;
-            console.log(req.user);
             return next();
         } else {
             return next(err);
@@ -25,30 +24,18 @@ exports.findUserByID = (req, res, next) => {
 /*
 Get all users from users table.
 */
-exports.getall = (req, res) => {
-    UserModel.find()
+exports.getall = (req, res) => {    
+    UserModel.find()  
         .then(usermodel => {
-            if (!usermodel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'unable to get users'
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Users retrieved successfully",
                 data: usermodel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'Unable to retrieve Users'
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
-                message: err.message
+                message: error.message
             });
         });
 };
@@ -58,27 +45,15 @@ exports.get = (req, res) => {
             userId: req.params.id
         })
         .then(objUserModel => {
-            if (!objUserModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'User not found with id ' + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "User retrieved successfully",
                 data: objUserModel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "User not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
-                message: err.message
+                message: error.message
             });
         });
 };
@@ -87,19 +62,11 @@ exports.get = (req, res) => {
 
 exports.add = (req, res) => {
     //validate the body content
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: 'User body can not be empty'
-        });
-    }
-
     const user = new UserModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         employeeId: req.body.employeeId
     });
-
     user.save()
         .then(objUser => {
             res.status(200).json({
@@ -118,13 +85,6 @@ exports.add = (req, res) => {
 
 exports.udpate = (req, res) => {
     // Validate Request
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: "Request body content can not be empty"
-        });
-    }
-
     // Find User and update it with the request body
     UserModel.findOneAndUpdate({
             userId: req.params.id
@@ -132,24 +92,12 @@ exports.udpate = (req, res) => {
             new: true
         })
         .then(objUserModel => {
-            if (!objUserModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "User not found with id " + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "User with id " + req.params.id + " updated",
                 data: objUserModel
             });
         }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "User not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: "Error updating User with id " + req.params.id
@@ -160,29 +108,45 @@ exports.udpate = (req, res) => {
 
 exports.delete = (req, res) => {
     UserModel.findOneAndRemove({
-            UserId: req.params.id
+            userId: req.params.id
         })
         .then(ObjUserModel => {
-            if (!ObjUserModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "User not found with id " + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "User deleted successfully!"
             });
         }).catch(err => {
-            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: "Could not delete Task with id " + req.params.id
+            });
+        });
+};
+
+
+/*
+search users from user table
+*/
+exports.search = (req, res) => {
+    let searchString = req.body.searchText;
+    var regex = new RegExp(searchString, 'i');
+    UserModel.find({
+            $or: [{
+                'firstName': regex
+            }, {
+                'lastName': regex
+            }]
+        })
+        .then(usermodel => {
+            res.status(200).json({
+                status: "success",
+                message: "Users retrieved successfully",
+                data: usermodel
+            });
+        }).catch(error => {
+            return res.status(500).json({
+                status: 'failure',
+                message: error.message
             });
         });
 };

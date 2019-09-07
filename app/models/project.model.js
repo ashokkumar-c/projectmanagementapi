@@ -9,9 +9,9 @@ const projectModel = new Schema(
       startDate: { type: Date},
       endDate: { type: Date},
       priority: { type: Number, required:true, min:0, max:30},
-      managerId:{type:Schema.Types.Number,ref: 'Users', required:true},  //manager id
+      managerId:{type:Schema.Types.Number ,ref: 'Users', required:true},  //manager id
       isSuspended: {type:Boolean}
     }
   );
-  projectModel.plugin(mongooseSequence,{id: 'projectId', inc_field: 'projectId'});//, {inc_field: 'projectId'});
+  projectModel.plugin(mongooseSequence,{id: 'projectId', inc_field: 'projectId'});
   module.exports = mongoose.model('Project', projectModel);

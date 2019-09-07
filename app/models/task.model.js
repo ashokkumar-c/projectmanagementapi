@@ -11,8 +11,9 @@ const taskModel = new Schema(
     parentTaskId:{type:Number},    
     startDate: { type: Date , required:true},
     endDate: { type: Date , required:true},
-    projectId:{type:Schema.Types.ObjectId,ref: 'Projects', required:true},
-    userId:{type:Schema.Types.ObjectId,ref: 'Users', required:true}      
+    projectId:{type:Schema.Types.Number,ref: 'Projects', required:true},
+    userId:{type:Schema.Types.Number,ref: 'Users', required:true},
+    isCompleted: {type: Boolean}      
   }
 );
 taskModel.plugin(mongooseSequence,{id: 'taskId', inc_field: 'taskId'});

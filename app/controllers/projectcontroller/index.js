@@ -26,24 +26,12 @@ Get all Projects from Projects table.
 exports.getall = (req, res) => {
     ProjectModel.find()
         .then(ProjectModel => {
-            if (!ProjectModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'unable to get Projects'
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Projects retrieved successfully",
                 data: ProjectModel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'Unable to retrieve Projects'
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: err.message
@@ -53,27 +41,15 @@ exports.getall = (req, res) => {
 
 exports.get = (req, res) => {
     ProjectModel.find({
-            ProjectId: req.params.id
+            projectId: req.params.id
         })
         .then(objProjectModel => {
-            if (!objProjectModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'Project not found with id ' + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Project retrieved successfully",
                 data: objProjectModel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Project not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: err.message
@@ -84,13 +60,6 @@ exports.get = (req, res) => {
 //add a task in to task table
 
 exports.add = (req, res) => {
-    //validate the body content
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: 'Project body can not be empty'
-        });
-    }
 
     const project = new ProjectModel({
         projectName: req.body.projectName,
@@ -119,39 +88,19 @@ exports.add = (req, res) => {
 }; // end of add task
 
 exports.udpate = (req, res) => {
-    // Validate Request
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: "Request body content can not be empty"
-        });
-    }
-
     // Find Project and update it with the request body
     ProjectModel.findOneAndUpdate({
-            ProjectId: req.params.id
+            projectId: req.params.id
         }, req.body, {
             new: true
         })
         .then(objProjectModel => {
-            if (!objProjectModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Project not found with id " + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Project with id " + req.params.id + " updated",
                 data: objProjectModel
             });
         }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Project not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: "Error updating Project with id " + req.params.id
@@ -162,7 +111,7 @@ exports.udpate = (req, res) => {
 
 exports.delete = (req, res) => {
     ProjectModel.findOneAndRemove({
-            ProjectId: req.params.id
+            projectId: req.params.id
         })
         .then(ObjProjectModel => {
             if (!ObjProjectModel) {
@@ -190,7 +139,9 @@ exports.delete = (req, res) => {
 };
 
 exports.search = (req, res) => {
-    ProjectModel.find()
+    let searchString = req.body.searchText;
+    var regex = new RegExp(searchString, 'i');
+    ProjectModel.find({'projectName': regex })
         .then(ProjectModel => {
             if (!ProjectModel) {
                 return res.status(404).json({

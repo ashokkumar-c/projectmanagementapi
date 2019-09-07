@@ -5,6 +5,9 @@ tasks.route('/')
     .get(taskcontroller.getall)
     .post(taskcontroller.add);
 
+tasks.route('/search/')
+    .get(taskcontroller.search);
+
 tasks.use('/:id', taskcontroller.findTaskByID);
 
 tasks.route('/:id')

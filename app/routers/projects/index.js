@@ -7,6 +7,9 @@ projects.route('/')
 
 projects.use('/:id', projectcontroller.findProjectByID);
 
+projects.route('/search/')
+    .get(projectcontroller.search);
+
 projects.route('/:id')
     .get(projectcontroller.get)
     .patch(projectcontroller.udpate)

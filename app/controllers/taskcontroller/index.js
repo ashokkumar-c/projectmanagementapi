@@ -26,27 +26,15 @@ Get all Tasks from Tasks table.
 exports.getall = (req, res) => {
     TaskModel.find()
         .then(TaskModel => {
-            if (!TaskModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'unable to get Tasks'
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Tasks retrieved successfully",
                 data: TaskModel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'Unable to retrieve Tasks'
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
-                message: err.message
+                message: error.message
             });
         });
 };
@@ -56,24 +44,12 @@ exports.get = (req, res) => {
             taskId: req.params.id
         })
         .then(objTaskModel => {
-            if (!objTaskModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: 'Task not found with id ' + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Task retrieved successfully",
                 data: objTaskModel
             });
         }).catch(error => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: err.message
@@ -84,24 +60,17 @@ exports.get = (req, res) => {
 //add a task in to task table
 
 exports.add = (req, res) => {
-    //validate the body content
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: 'Task body can not be empty'
-        });
-    }
 
     const Task = new TaskModel({
-        taskName: req.body.TaskName,
-        isParentTask:req.body.isParentTask,
+        taskName: req.body.taskName,
+        isParentTask: req.body.isParentTask,
         priority: req.body.priority,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         projectId: req.body.projectId,
         userId: req.body.userId
     });
- 
+
     Task.save()
         .then(objTask => {
             res.status(200).json({
@@ -119,13 +88,6 @@ exports.add = (req, res) => {
 }; // end of add task
 
 exports.udpate = (req, res) => {
-    // Validate Request
-    if (!req.body) {
-        return res.status(400).json({
-            status: 'failure',
-            message: "Request body content can not be empty"
-        });
-    }
 
     // Find Task and update it with the request body
     TaskModel.findOneAndUpdate({
@@ -134,24 +96,12 @@ exports.udpate = (req, res) => {
             new: true
         })
         .then(objTaskModel => {
-            if (!objTaskModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Task with id " + req.params.id + " updated",
                 data: objTaskModel
             });
         }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: "Error updating Task with id " + req.params.id
@@ -165,26 +115,34 @@ exports.delete = (req, res) => {
             taskId: req.params.id
         })
         .then(ObjTaskModel => {
-            if (!ObjTaskModel) {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             res.status(200).json({
                 status: "success",
                 message: "Task deleted successfully!"
             });
         }).catch(err => {
-            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-                return res.status(404).json({
-                    status: 'failure',
-                    message: "Task not found with id " + req.params.id
-                });
-            }
             return res.status(500).json({
                 status: 'failure',
                 message: "Could not delete Task with id " + req.params.id
+            });
+        });
+};
+
+exports.search = (req, res) => {
+    let searchString = req.body.searchText;
+    var regex = new RegExp(searchString, 'i');
+    TaskModel.find({
+            'taskName': regex
+        })
+        .then(objTaskModel => {
+            res.status(200).json({
+                status: "success",
+                message: "Tasks retrieved successfully",
+                data: objTaskModel
+            });
+        }).catch(error => {
+            return res.status(500).json({
+                status: 'failure',
+                message: error.message
             });
         });
 };
