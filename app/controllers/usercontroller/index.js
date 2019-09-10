@@ -128,7 +128,8 @@ exports.delete = (req, res) => {
 search users from user table
 */
 exports.search = (req, res) => {
-    let searchString = req.body.searchText;
+    let searchString = req.query.q;
+    console.log(req.params);
     var regex = new RegExp(searchString, 'i');
     UserModel.find({
             $or: [{

@@ -128,7 +128,7 @@ exports.delete = (req, res) => {
 };
 
 exports.search = (req, res) => {
-    let searchString = req.body.searchText;
+    let searchString = req.query.q;
     var regex = new RegExp(searchString, 'i');
     TaskModel.find({
             'taskName': regex
