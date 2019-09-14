@@ -1,4 +1,5 @@
 const ProjectModel = require('../../models/project.model');
+const TaskModel = require('../../models/task.model');
 
 exports.findProjectByID = (req, res, next) => {
     ProjectModel.find({
@@ -24,17 +25,25 @@ exports.findProjectByID = (req, res, next) => {
 Get all Projects from Projects table.
 */
 exports.getall = (req, res) => {
+    var result;
     ProjectModel.find()
-        .then(ProjectModel => {
+        .then(objProjectModel => { 
+            result = objProjectModel;       
+           /* objProjectModel.forEach((d,i) =>{
+                let query = { projectId: d.projectId };
+                TaskModel.find(query,(error, taskData) => {
+                    result[i].noOfTasks = taskData.length;
+                });
+            });*/
             res.status(200).json({
                 status: "success",
                 message: "Projects retrieved successfully",
-                data: ProjectModel
-            });
+                data: result
+            });           
         }).catch(error => {
             return res.status(500).json({
                 status: 'failure',
-                message: err.message
+                message: error.message
             });
         });
 };
@@ -68,7 +77,9 @@ exports.add = (req, res) => {
         endDate: req.body.endDate,
         priority: req.body.priority,
         managerId: req.body.managerId,
-        isSuspended: req.body.isSuspended
+        managerName: req.body.managerName,
+        isSuspended: false,
+        noOfTasks:0
     });
 
     project.save()

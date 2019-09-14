@@ -64,12 +64,13 @@ describe('project module Test', () => {
     });
 
     describe('=> Test get methods', () => {
-        it('It should all projects', (done) => {
+        it('It should show all projects', (done) => {
             chai.request(server)
                 .get('/projects')
                 .end((err, res) => {
                     res.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
+                    console.log(res.body);                    
                     done();
                 });
         });

@@ -10,7 +10,9 @@ const projectModel = new Schema(
       endDate: { type: Date},
       priority: { type: Number, required:true, min:0, max:30},
       managerId:{type:Schema.Types.Number ,ref: 'Users', required:true},  //manager id
-      isSuspended: {type:Boolean}
+      managerName: {type:String, required:true},      
+      isSuspended: {type:Boolean},
+      noOfTasks: {type: Number, default:0}
     }
   );
   projectModel.plugin(mongooseSequence,{id: 'projectId', inc_field: 'projectId'});
