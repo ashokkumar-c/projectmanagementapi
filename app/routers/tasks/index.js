@@ -8,6 +8,12 @@ tasks.route('/')
 tasks.route('/search/')
     .get(taskcontroller.search);
 
+tasks.route('/:id/tasks')
+    .get(taskcontroller.getTasksByProjectId);
+
+tasks.route('/:id/parenttasks')
+    .get(taskcontroller.getParentTasksByProjectId);
+
 tasks.use('/:id', taskcontroller.findTaskByID);
 
 tasks.route('/:id')

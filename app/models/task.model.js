@@ -8,12 +8,15 @@ const taskModel = new Schema(
     taskName: { type: String, required:true },
     isParentTask: {type:Boolean},
     priority: { type: Number, default: 0, min:0, max:30 },
-    parentTaskId:{type:Number},    
-    startDate: { type: Date , required:true},
-    endDate: { type: Date , required:true},
+    parentTaskId:{type:Number},
+    parentTaskName: {type: String, default:''},    
+    startDate: { type: Date , default: ''},
+    endDate: { type: Date , default: ''},
     projectId:{type:Schema.Types.Number,ref: 'Projects', required:true},
-    userId:{type:Schema.Types.Number,ref: 'Users', required:true},
-    isCompleted: {type: Boolean}      
+    projectName: {type: String, default:''},
+    userId:{type:Schema.Types.Number,ref: 'Users'},
+    userName: {type:String, default:''},
+    isCompleted: {type: Boolean,default:false}      
   }
 );
 taskModel.plugin(mongooseSequence,{id: 'taskId', inc_field: 'taskId'});

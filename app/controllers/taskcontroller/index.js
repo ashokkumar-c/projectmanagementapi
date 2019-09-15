@@ -68,7 +68,11 @@ exports.add = (req, res) => {
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         projectId: req.body.projectId,
-        userId: req.body.userId
+        projectName: req.body.projectName,
+        userId: req.body.userId,
+        userName: req.body.userName,
+        parentTaskId: req.body.parentTaskId,
+        parentTaskName: req.body.parentTaskName
     });
 
     Task.save()
@@ -132,6 +136,50 @@ exports.search = (req, res) => {
     var regex = new RegExp(searchString, 'i');
     TaskModel.find({
             'taskName': regex
+        })
+        .then(objTaskModel => {
+            res.status(200).json({
+                status: "success",
+                message: "Tasks retrieved successfully",
+                data: objTaskModel
+            });
+        }).catch(error => {
+            return res.status(500).json({
+                status: 'failure',
+                message: error.message
+            });
+        });
+};
+
+exports.getTasksByProjectId = (req, res) => {
+    let id = req.params.id;
+    //var regex = new RegExp(searchString, 'i');
+    TaskModel.find({
+            'projectId': id
+        })
+        .then(objTaskModel => {
+            res.status(200).json({
+                status: "success",
+                message: "Tasks retrieved successfully",
+                data: objTaskModel
+            });
+        }).catch(error => {
+            return res.status(500).json({
+                status: 'failure',
+                message: error.message
+            });
+        });
+};
+
+exports.getParentTasksByProjectId = (req, res) => {
+    let searchString = req.query.q;
+    let id = req.params.id;
+    var regex = new RegExp(searchString, 'i');
+    //var regex = new RegExp(searchString, 'i');
+    TaskModel.find({
+            'projectId': id,
+            'taskName': regex,
+            'isParentTask':true
         })
         .then(objTaskModel => {
             res.status(200).json({
