@@ -5,8 +5,7 @@ exports.findUserByID = (req, res, next) => {
     UserModel.find({
         userId: req.params.id
     }, (err, User) => {
-        if (err) {
-            console.log(err.message);
+        if (err) {            
             res.send(err);
         }
         if (User) {
@@ -128,8 +127,7 @@ exports.delete = (req, res) => {
 search users from user table
 */
 exports.search = (req, res) => {
-    let searchString = req.query.q;
-    console.log(req.params);
+    let searchString = req.query.q;    
     var regex = new RegExp(searchString, 'i');
     UserModel.find({
             $or: [{

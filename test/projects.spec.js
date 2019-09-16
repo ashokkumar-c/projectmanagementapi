@@ -47,7 +47,9 @@ describe('project module Test', () => {
                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
                 priority: 10,
                 managerId: 4,
-                isSuspended: 'false'
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             };
             chai.request(server)
                 .post('/projects')
@@ -69,8 +71,7 @@ describe('project module Test', () => {
                 .get('/projects')
                 .end((err, res) => {
                     res.should.be.a('object');
-                    res.body.should.have.property('status').eql('success');
-                    console.log(res.body);                    
+                    res.body.should.have.property('status').eql('success');                 
                     done();
                 });
         });
@@ -83,7 +84,9 @@ describe('project module Test', () => {
                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
                 priority: 10,
                 managerId: 4,
-                isSuspended: 'false'
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             });
             newproject.save((err, data) => {
                 chai.request(server)
@@ -109,19 +112,20 @@ describe('project module Test', () => {
             };
             var newUdateproject = new projectTest({
                 projectName: 'unit test project',
-                 setDates: 'true',
-                 startDate: moment("05-06-1995", "MM-DD-YYYY"),
-                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
-                 priority: 10,
-                 managerId: 4,
-                 isSuspended: 'false'
+                setDates: 'true',
+                startDate: moment("05-06-1995", "MM-DD-YYYY"),
+                endDate: moment("05-06-2019", "MM-DD-YYYY"),
+                priority: 10,
+                managerId: 4,
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             });
             newUdateproject.save((err, data) => {
                 chai.request(server)
                     .patch('/projects/' + data.projectId)
                     .send(projectUpdatenewInput)
                     .end((err, res) => {
-                        console.log(res.body);
                         res.should.have.status(500);
                         res.body.should.be.a('object');
                         res.body.should.have.property('status').eql('failure');
@@ -137,12 +141,14 @@ describe('project module Test', () => {
             };
             var newUdateproject = new projectTest({
                 projectName: 'unit test project',
-                 setDates: 'true',
-                 startDate: moment("05-06-1995", "MM-DD-YYYY"),
-                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
-                 priority: 10,
-                 managerId: 4,
-                 isSuspended: 'false'
+                setDates: 'true',
+                startDate: moment("05-06-1995", "MM-DD-YYYY"),
+                endDate: moment("05-06-2019", "MM-DD-YYYY"),
+                priority: 10,
+                managerId: 4,
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             });
             newUdateproject.save((err, data) => {
                 chai.request(server)
@@ -170,7 +176,9 @@ describe('project module Test', () => {
                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
                 priority: 10,
                 managerId: 4,
-                isSuspended: 'false'
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             });
             newDeleteprojectInput.save((err, data) => {
                 chai.request(server)
@@ -191,25 +199,27 @@ describe('project module Test', () => {
                 searchText: 'searchTest'
             };
             var newSearchprojectInput = new projectTest({
-                projectName: 'searchTest',
+                projectName: 'searchTestProject',
                 setDates: 'true',
                 startDate: moment("05-06-1995", "MM-DD-YYYY"),
                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
                 priority: 10,
                 managerId: 4,
-                isSuspended: 'false'
+                managerName: 'testmanager',
+                isSuspended: 'false',
+                noOfTasks: 0
             });
             newSearchprojectInput.save((err, data) => {
                 chai.request(server)
-                    .get('/projects/search/')
-                    .send(searchText)
+                    .get('/projects/search/?q=searchTestProject')
+                    //.send(searchText)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         res.body.should.have.property('status').eql('success');
                         res.body.should.have.property('message').eql('Projects retrieved successfully');
                         res.body.data[0].should.have.property('_id');
-                        res.body.data[0].should.have.property('projectName').eql('searchTest');
+                        res.body.data[0].should.have.property('projectName').eql('searchTestProject');
                         done();
                     });
             });

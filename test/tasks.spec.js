@@ -57,7 +57,6 @@ describe('task module Test', () => {
                 .post('/tasks')
                 .send(newTask)
                 .end((err, res) => {
-                    console.log(res.body);
                     res.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
                     res.body.should.have.property('message').eql('New Task created!');
@@ -129,7 +128,6 @@ describe('task module Test', () => {
                     .patch('/tasks/' + data.taskId)
                     .send(taskUpdatenewInput)
                     .end((err, res) => {
-                        console.log(res.body);
                         res.should.have.status(500);
                         res.body.should.be.a('object');
                         res.body.should.have.property('status').eql('failure');
@@ -215,8 +213,8 @@ describe('task module Test', () => {
             });
             newSearchtaskInput.save((err, data) => {
                 chai.request(server)
-                    .get('/tasks/search/')
-                    .send(searchText)
+                    .get('/tasks/search/?q=searchTest')
+                    //.send(searchText)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');

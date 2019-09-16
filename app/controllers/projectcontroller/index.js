@@ -5,8 +5,7 @@ exports.findProjectByID = (req, res, next) => {
     ProjectModel.find({
         ProjectId: req.params.id
     }, (err, Project) => {
-        if (err) {
-            console.log(err.message);
+        if (err) {          
             res.send(err);
         }
         if (Project) {

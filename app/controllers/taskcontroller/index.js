@@ -4,8 +4,7 @@ exports.findTaskByID = (req, res, next) => {
     TaskModel.find({
         taskId: req.params.id
     }, (err, task) => {
-        if (err) {
-            console.log(err.message);
+        if (err) {            
             res.send(err);
         }
         if (task) {
