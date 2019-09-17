@@ -47,11 +47,15 @@ describe('task module Test', () => {
                 isParentTask: 'false',
                 priority: 10,
                 parentTaskId: '',
+                parentTaskName: 'test',
                 startDate: moment("05-06-1995", "MM-DD-YYYY"),
                 endDate: moment("05-06-2019", "MM-DD-YYYY"),
                 projectId: 10,
+                projectName: 'test',
                 userId: 20,
                 isCompleted: 'false'
+                
+
             };
             chai.request(server)
                 .post('/tasks')

@@ -4,7 +4,7 @@
             "port" : 3000
         },
         "db":{
-            "host":"mongo",
+            "host":"localhost",
             "port":"27017",
             "database":"projectmanagement"
         }
@@ -14,7 +14,7 @@
             "port" : 3001
         },
         "db":{
-            "host":"mongo",
+            "host":"localhost",
             "port":"27017",
             "database":"projectmanagementUTdb"
         }
@@ -24,7 +24,7 @@
             "port" : 3000
         },
         "db":{
-            "host":"mongo",
+            "host":"localhost",
             "port":"27017",
             "database":"projectmanagementdb"
         }
@@ -34,7 +34,7 @@
             "port" : 3000
         },
         "db":{
-            "host":"mongo",
+            "host":"localhost",
             "port":"27017",
             "database":"projectmanagementdb"
         }
@@ -44,7 +44,7 @@
             "port" : 3000
         },
         "db":{
-            "host":"mongo",
+            "host":"localhost",
             "port":"27017",
             "database":"projectmanagementdb"
         }
