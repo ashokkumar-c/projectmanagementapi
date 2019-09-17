@@ -1,4 +1,5 @@
 const TaskModel = require('../../models/task.model');
+const ProjectModel = require('../../models/project.model');
 
 exports.findTaskByID = (req, res, next) => {
     TaskModel.find({
@@ -76,15 +77,31 @@ exports.add = (req, res) => {
 
     Task.save()
         .then(objTask => {
-            res.status(200).json({
-                status: "success",
-                message: "New Task created!",
-                data: objTask
-            });
+            taskProjectId = objTask.projectId;
+            ProjectModel.find({
+                projectId: taskProjectId
+            })
+            .then(objProjectModel => {              
+                ProjectModel.findOneAndUpdate({
+                    projectId: taskProjectId},{'noOfTasks': objProjectModel[0].noOfTasks ? objProjectModel[0].noOfTasks + 1 : 1 },{new: true}
+                ).then(objUpdateProjectModel=>{
+                    console.log('project id and no. of task'+ objUpdateProjectModel.projectId + ',' + objUpdateProjectModel.noOfTasks);
+                    res.status(200).json({
+                        status: "success",
+                        message: "New Task created!",
+                        data: objTask
+                    });
+                });                
+            }).catch(error => {
+                return res.status(500).json({
+                    status: 'failure',
+                    message: error.message
+                });
+            });           
         }).catch(error => {
             res.status(500).json({
                 status: 'failure',
-                message: error
+                message: error.message
             });
         });
 
